@@ -1,6 +1,6 @@
 'use strict';
 
-const apiBase = "http://localhost:3000/api/weather";
+const apiBase = "https://app-clima-ghod.onrender.com/";
 
 const cityElement = document.querySelector("#city");
 const dateElement = document.querySelector("#date");
