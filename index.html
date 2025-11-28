@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <main class="app-wrapper">
+        <div class="card weather-card shadow-lg border-0">
+            <div class="card-body p-4 text-center">
+                
+                <div class="search-container input-group mb-4">
+                    <input type="text" id="search-input" class="form-control border-0 bg-light" placeholder="Buscar cidade..." autocomplete="off">
+                    <button class="btn btn-primary" type="button" id="search-btn">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+
+                <div id="loader" class="d-none py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                </div>
+
+                <div id="error-msg" class="alert alert-danger d-none text-start" role="alert">
+                    <small><i class="bi bi-exclamation-circle-fill me-2"></i> Cidade não encontrada.</small>
+                </div>
+
+                <div id="weather-data">
+                    <h2 class="city-name h4 fw-bold mb-1" id="city">--</h2>
+                    <p class="date text-muted small mb-4" id="date">--</p>
+                    
+                    <div class="weather-main d-flex align-items-center justify-content-center mb-4">
+                        <img id="weather-icon" src="" alt="Icone do clima" class="me-2" width="80">
+                        <h1 class="temp display-2 fw-bold mb-0" id="temp">--°</h1>
+                    </div>
+                    
+                    <p class="description text-capitalize fs-5 mb-4" id="description">--</p>
+                    
+                    <div class="details-grid row g-3">
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded-3 d-flex align-items-center">
+                                <i class="bi bi-droplet-fill text-primary fs-4 me-3"></i>
+                                <div class="text-start">
+                                    <div class="small text-muted">Umidade</div>
+                                    <div class="fw-bold" id="humidity">--%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded-3 d-flex align-items-center">
+                                <i class="bi bi-wind text-secondary fs-4 me-3"></i>
+                                <div class="text-start">
+                                    <div class="small text-muted">Vento</div>
+                                    <div class="fw-bold" id="wind">-- km/h</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
