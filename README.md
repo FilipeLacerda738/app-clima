@@ -2,7 +2,7 @@
 
 > Uma aplicação web simples e intuitiva para consultar as condições climáticas de qualquer cidade do mundo em tempo real.
 
-**[Acesse o projeto online aqui](https://github.com/FilipeLacerda738/app-clima)**
+**[Acesse o projeto online aqui](https://filipelacerda738.github.io/app-clima/)**
 
 ## Sobre o projeto 
 Este projeto é uma ferramenta de monitoramento de clima desenvolvida para ser rápida e fácil de usar. O objetivo foi criar uma interface limpa onde o usuário possa obter informações essenciais como temperatura, umidade e vento instantaneamente, tanto no computador quanto no celular.
