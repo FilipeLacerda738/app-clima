@@ -1,7 +1,6 @@
 'use strict';
 
-const apiKey = "44b94be2ecc9797841d7092b44744969"; 
-const apiBase = "https://api.openweathermap.org/data/2.5/weather";
+const apiBase = "http://localhost:3000/api/weather";
 
 const cityElement = document.querySelector("#city");
 const dateElement = document.querySelector("#date");
@@ -21,47 +20,20 @@ async function getWeatherData(city) {
     resetUI();
 
     try {
-        if (!city) {
-            throw {
-                user: "Por favor, digite o nome de uma cidade.",
-                dev: "Validação falhou: String vazia."
-            };
-        }
+        if (!city) throw { user: "Por favor, digite o nome de uma cidade." };
 
-        const response = await fetch(`${apiBase}?q=${city}&units=metric&lang=pt_br&appid=${apiKey}`);
-
-        if (response.status === 404) {
-            throw {
-                user: "Cidade não encontrada. Verifique o nome.",
-                dev: `Erro 404: Cidade '${city}' não existe.`
-            };
-        }
-
-        if (response.status === 401) {
-            throw {
-                user: "Serviço indisponível no momento.",
-                dev: "Erro 401: API Key inválida."
-            };
-        }
-
-        if (!response.ok) {
-            throw {
-                user: "Erro interno. Tente novamente mais tarde.",
-                dev: `Erro HTTP: ${response.status}`
-            };
-        }
-
+        const response = await fetch(`${apiBase}?city=${city}`);
         const data = await response.json();
+
+        if (response.status === 404) throw { user: "Cidade não encontrada." };
+        if (response.status === 401) throw { user: "Serviço indisponível temporariamente." };
+        if (!response.ok) throw { user: "Erro ao obter dados do clima." };
+        if (data.cod && data.cod != 200) throw { user: "Erro inesperado na API." };
+
         updateUI(data);
 
     } catch (error) {
-        if (error.user && error.dev) {
-            console.warn(error.dev);
-            showError(error.user);
-        } else {
-            console.error(error);
-            showError("Erro de conexão.");
-        }
+        showError(error.user || "Erro de conexão com o servidor.");
     } finally {
         toggleLoader(false);
     }
@@ -84,8 +56,6 @@ function updateUI(data) {
         month: 'long'
     });
 
-  
-
     weatherContainer.classList.remove("d-none");
 }
 
@@ -103,7 +73,7 @@ function toggleLoader(state) {
 }
 
 function showError(message) {
-    errorMsg.innerHTML = `<small><i class="bi bi-exclamation-circle-fill me-2"></i> ${message}</small>`;
+    errorMsg.innerHTML = `<small>${message}</small>`;
     errorMsg.classList.remove("d-none");
     weatherContainer.classList.add("d-none");
 }
