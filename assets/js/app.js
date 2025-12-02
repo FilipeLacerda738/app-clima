@@ -1,6 +1,12 @@
 'use strict';
 
-const apiBase = "https://app-clima-ghod.onrender.com/api/weather";
+let apiBase;
+if (window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost") {
+    console.log("Usando servidor Local");
+    apiBase = "http://localhost:3000/api/weather";
+} else {
+    apiBase = "https://app-clima-ghod.onrender.com/api/weather";
+}
 
 const cityElement = document.querySelector("#city");
 const dateElement = document.querySelector("#date");
@@ -11,21 +17,29 @@ const humidityElement = document.querySelector("#humidity");
 const windElement = document.querySelector("#wind");
 const searchInput = document.querySelector("#search-input");
 const searchBtn = document.querySelector("#search-btn");
+const gpsBtn = document.querySelector("#gps-btn");
 const weatherContainer = document.querySelector("#weather-data");
 const loader = document.querySelector("#loader");
 const errorMsg = document.querySelector("#error-msg");
 
-async function getWeatherData(city) {
+async function getWeatherData(queryType, value) {
     toggleLoader(true);
     resetUI();
 
     try {
-        if (!city) throw { user: "Por favor, digite o nome de uma cidade." };
+        let url = '';
 
-        const response = await fetch(`${apiBase}?city=${city}`);
+        if (queryType === 'city') {
+            if (!value) throw { user: "Por favor, digite o nome de uma cidade." };
+            url = `${apiBase}?city=${value}`;
+        } else if (queryType === 'coords') {
+            url = `${apiBase}?lat=${value.lat}&lon=${value.lon}`;
+        }
+
+        const response = await fetch(url);
         const data = await response.json();
 
-        if (response.status === 404) throw { user: "Cidade não encontrada." };
+        if (response.status === 404) throw { user: "Localização não encontrada." };
         if (response.status === 401) throw { user: "Serviço indisponível temporariamente." };
         if (!response.ok) throw { user: "Erro ao obter dados do clima." };
         if (data.cod && data.cod != 200) throw { user: "Erro inesperado na API." };
@@ -36,6 +50,27 @@ async function getWeatherData(city) {
         showError(error.user || "Erro de conexão com o servidor.");
     } finally {
         toggleLoader(false);
+    }
+}
+
+function getUserLocation() {
+    if (navigator.geolocation) {
+        toggleLoader(true);
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                getWeatherData('coords', { lat, lon });
+            },
+            (error) => {
+                toggleLoader(false);
+                let msg = "Erro ao obter localização.";
+                if (error.code === error.PERMISSION_DENIED) msg = "Permissão de localização negada.";
+                showError(msg);
+            }
+        );
+    } else {
+        showError("Seu navegador não suporta geolocalização.");
     }
 }
 
@@ -79,13 +114,17 @@ function showError(message) {
 }
 
 searchBtn.addEventListener("click", () => {
-    getWeatherData(searchInput.value);
+    getWeatherData('city', searchInput.value);
+});
+
+gpsBtn.addEventListener("click", () => {
+    getUserLocation();
 });
 
 searchInput.addEventListener("keyup", (event) => {
     if (event.key === "Enter") {
-        getWeatherData(searchInput.value);
+        getWeatherData('city', searchInput.value);
     }
 });
 
-getWeatherData("São Paulo");
+getWeatherData('city', "São Paulo");
