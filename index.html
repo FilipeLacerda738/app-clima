@@ -20,11 +20,12 @@
                     <button class="btn btn-outline-secondary border-0 bg-light" type="button" id="gps-btn" title="Usar minha localização">
                         <i class="bi bi-geo-alt-fill text-primary"></i>
                     </button>
-                    
                     <button class="btn btn-primary" type="button" id="search-btn">
                         <i class="bi bi-search"></i>
                     </button>
                 </div>
+
+                <div id="history" class="d-flex justify-content-center flex-wrap gap-2 mb-4"></div>
 
                 <div id="loader" class="d-none py-4">
                     <div class="spinner-border text-primary" role="status">
@@ -67,6 +68,10 @@
                             </div>
                         </div>
                     </div>
+
+                    <hr class="my-4 opacity-25">
+                    <h4 class="h6 mb-3 text-muted">Próximos 5 Dias</h4>
+                    <div id="forecast-container" class="d-flex justify-content-between text-center gap-2 overflow-auto pb-2"></div>
                 </div> 
 
             </div>
